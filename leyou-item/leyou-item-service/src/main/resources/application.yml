@@ -1,0 +1,50 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: item-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/leyou
+    username: root
+    password: root
+    hikari:
+      max-lifetime: 28830000 # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒，参考MySQL wait_timeout参数（show variables like '%timeout%';）
+      maximum-pool-size: 9 # 连接池中允许的最大连接数。缺省值：10；推荐的公式：((core_count * 2) + effective_spindle_count)
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5 # 5秒钟发送一次心跳
+    lease-expiration-duration-in-seconds: 10 # 10秒不发送就过期
+      #    服务注册
+      #
+      #    服务提供者在启动时，会检测配置属性中的：eureka.client.register-with-eureka=true参数是否正确，事实上默认就是true。如果值确实为true，则会向EurekaServer发起一个Rest请求，并携带自己的元数据信息，Eureka Server会把这些信息保存到一个双层Map结构中。
+      #
+      #    - 第一层Map的Key就是服务id，一般是配置中的spring.application.name属性
+      #    - 第二层Map的key是服务的实例id。一般host+ serviceId + port，例如：locahost:service-provider:8081
+      #    - 值则是服务的实例对象，也就是说一个服务，可以同时启动多个不同实例，形成集群。
+      #
+      #    服务续约
+      #
+      #    在注册服务完成以后，服务提供者会维持一个心跳（定时向EurekaServer发起Rest请求），告诉EurekaServer：“我还活着”。这个我们称为服务的续约（renew）；
+      #
+      #    有两个重要参数可以修改服务续约的行为：
+      #
+      #    eureka:
+      #      instance:
+      #        lease-expiration-duration-in-seconds: 90
+      #        lease-renewal-interval-in-seconds: 30
+      #
+      #      - lease-renewal-interval-in-seconds：服务续约(renew)的间隔，默认为30秒
+      #      - lease-expiration-duration-in-seconds：服务失效时间，默认值90秒
+      #
+      #    也就是说，默认情况下每个30秒服务会向注册中心发送一次心跳，证明自己还活着。如果超过90秒没有发送心跳，EurekaServer就会认为该服务宕机，会从服务列表中移除，这两个值在生产环境不要修改，默认即可。
+      #
+      #    但是在开发时，这个值有点太长了，经常我们关掉一个服务，会发现Eureka依然认为服务在活着。所以我们在开发阶段可以适当调小。
+      #     eureka:
+      #        instance:
+    #             lease-expiration-duration-in-seconds: 10 # 10秒即过期
+    #             lease-renewal-interval-in-seconds: 5 # 5秒一次心跳
+mybatis:
+  type-aliases-package: com.leyou.item.pojo #别名扫描

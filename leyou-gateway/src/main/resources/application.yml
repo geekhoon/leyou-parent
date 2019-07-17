@@ -1,0 +1,14 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: leyou-gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka # EurekaServer的地址
+    registry-fetch-interval-seconds: 5 #获取服务列表 拉取Eureka Server服务的列表只读备份，然后缓存在本地。并且每隔5秒会重新获取并更新数据
+zuul:
+  prefix: /api #通过zuul.prefix=/api来指定了路由的前缀，这样在发起请求时，路径就要以/api开头。
+  routes:
+    item-service: /item/** # 路由到商品的微服务
